@@ -61,4 +61,57 @@ $(function(){
 
     /* ============ End Model =========== */
 
+    /* ============ Start View =========== */
+
+    var view = {
+        // grab important elements
+        header: $('#header'),
+        contacts: $('#topContacts'),
+        work: $('#workExperience'),
+        projects: $('projects'),
+        map: $('mapDiv'),
+        init: function (b, e, w, p) {
+            var dt = '%data%';
+            // replace %data% with suitable object
+            HTMLheaderName = HTMLheaderName.replace(dt, b.name);
+            HTMLheaderRole = HTMLheaderRole.replace(dt, b.role);
+            HTMLmobile = HTMLmobile.replace(dt, b.contacts.mobile);
+            HTMLemail = HTMLemail.replace(dt, b.contacts.email);
+            HTMLwelcomeMsg = HTMLwelcomeMsg.replace(dt, b.welcomeMessage);
+
+            
+            // HTMLskillsStart
+            // HTMLskills
+            // HTMLworkStart
+            this.render();
+        },
+
+        render: function(){
+            this.header.append(HTMLheaderName);     // append name
+            this.contacts.append(HTMLmobile, HTMLemail);  //append contacts
+            
+        }
+    }
+
+    /* ============= End View ========== */
+
+    /* =========== Start Controller ========== */
+    var controller = {
+        init: function(){
+            this.launch();
+        },
+        launch: function () {
+            // load model objects
+            var b = model.bio,
+                e = model.education,
+                w = model.work,
+                p = model.projects;
+
+            // send objects to view
+            view.init(b, e, w, p);
+        }
+    }
+
+    // initialize controller
+    controller.init();
 })
