@@ -5,14 +5,14 @@ $(function(){
     var model = {
         bio: {
             name: 'Hasan',
-            role: 'Front End Web',
+            role: 'Front End Web Developer',
             contacts: {
                 mobile: '123456',
                 email: 'gmail@gmail.com'
             },
             welcomeMessage: 'Hello World!',
-            skills: ['HTML', 'CSS', 'Javascript'],
-            biopic: 'fry.jpg',
+            skills: ['HTML', 'CSS', 'Javascript', 'PHP'],
+            biopic: '../images/fry.jpg',
         },
 
         education: {
@@ -23,6 +23,13 @@ $(function(){
                     degree: 'technical license',
                     majors: ['programming', 'web'],
                     dates: '2014-2015',
+                },
+                {
+                    name: 'IUL',
+                    location: 'Lebanon',
+                    degree: 'Bachelor degree',
+                    majors: ['Business', 'MIS'],
+                    dates: '2017-2020',
                 }
             ],
             onlineCourses: [
@@ -30,7 +37,13 @@ $(function(){
                     title: 'Data analyst',
                     school: 'Udacity',
                     dates: '2018',
-                    url: 'uda'
+                    url: 'http://www.udacity.com'
+                },
+                {
+                    title: 'Front End Nanodegree',
+                    school: 'Udacity',
+                    dates: '2018',
+                    url: 'http://www.udacity.com'
                 }
             ],
         },
@@ -43,6 +56,13 @@ $(function(){
                     location: 'job location',
                     dates: '2015-2018',
                     description: 'job description'
+                },
+                {
+                    employer: 'employer2',
+                    title: 'job title 2',
+                    location: 'job location 2',
+                    dates: '2015-2017',
+                    description: 'job description 2'
                 }
             ],
         },
@@ -53,7 +73,13 @@ $(function(){
                     title: 'project 1',
                     dates: '2018',
                     description: 'project description',
-                    images: ['img', 'img']
+                    images: ['../images/197x148.gif', '../images/197x148.gif']
+                },
+                {
+                    title: 'project 2',
+                    dates: '2019',
+                    description: 'project description 2',
+                    images: ['img.jpg', 'img.jpg']
                 }
             ],
         }
@@ -67,8 +93,10 @@ $(function(){
         // grab important elements
         header: $('#header'),
         contacts: $('#topContacts'),
+        skills: $('div[style]'),  //attribute selector
+        edu: $('#education'),
         work: $('#workExperience'),
-        projects: $('projects'),
+        projects: $('#projects'),
         map: $('mapDiv'),
         init: function (b, e, w, p) {
             var dt = '%data%';
@@ -78,18 +106,77 @@ $(function(){
             HTMLmobile = HTMLmobile.replace(dt, b.contacts.mobile);
             HTMLemail = HTMLemail.replace(dt, b.contacts.email);
             HTMLwelcomeMsg = HTMLwelcomeMsg.replace(dt, b.welcomeMessage);
+            HTMLbioPic = HTMLbioPic.replace(dt, b.biopic);
 
-            
-            // HTMLskillsStart
-            // HTMLskills
-            // HTMLworkStart
-            this.render();
+            this.header.append(HTMLheaderName, HTMLbioPic, HTMLheaderRole);     // append name
+
+            this.contacts.append(HTMLmobile, HTMLemail, HTMLwelcomeMsg);  //append contacts
+
+            this.skills.append(HTMLskillsStart);
+
+            this.work.append(HTMLworkStart);
+
+            this.projects.append(HTMLprojectStart);
+
+            this.edu.append(HTMLschoolStart);
+
+            this.render(b, e, w, p);
         },
 
-        render: function(){
-            this.header.append(HTMLheaderName);     // append name
-            this.contacts.append(HTMLmobile, HTMLemail);  //append contacts
-            
+        render: function(b, e, w, p){
+            var dt = '%data%';
+
+            // add each skill
+            b.skills.forEach( sk =>{
+                $('ul#skills').addClass('dark-gray').append(HTMLskills.replace(dt, sk));
+            });
+
+            // append each job, to workExperience section
+            w.jobs.forEach(j => {
+                $('.work-entry').append(
+                    HTMLworkEmployer.replace(dt, j.employer)
+                    + HTMLworkTitle.replace(dt, j.title)
+                    + HTMLworkDates.replace(dt, j.dates)
+                    + HTMLworkLocation.replace(dt, j.location)
+                    + HTMLworkDescription.replace(dt, j.description)
+                );
+            });
+
+            // append each project, to projects section
+            p.projects.forEach( e=>{
+                $('.project-entry').append(
+                    HTMLprojectTitle.replace(dt, e.title)
+                    + HTMLprojectDates.replace(dt, e.dates)
+                    + HTMLprojectDescription.replace(dt, e.description)
+                    + HTMLprojectImage.replace(dt, b.biopic)
+                );
+            });
+
+            $('.education-entry').append('<h3>Schools</h3>');
+            // append schools, to education
+            e.schools.forEach( s => {
+                $('.education-entry').append(
+                    HTMLschoolName.replace(dt, s.name)
+                    + HTMLschoolDegree.replace(dt, s.degree)
+                    + HTMLschoolDates.replace(dt, s.dates)
+                    + HTMLschoolLocation.replace(dt, s.location)
+                    + s.majors.map(m => {
+                        return HTMLschoolMajor.replace(dt, m);
+                    })
+                );
+            });
+
+            $('.education-entry').append(HTMLonlineClasses);
+
+            e.onlineCourses.forEach(o =>{
+                $('.education-entry').append(
+                    HTMLonlineTitle.replace(dt, o.title)
+                    + HTMLonlineSchool.replace(dt, o.school)
+                    + HTMLonlineDates.replace(dt, o.dates)
+                    + HTMLonlineURL.replace(dt, o.url)
+                );
+            })
+
         }
     }
 
